@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CommandProj.Models;
 
 namespace CommandProj
 {
@@ -16,8 +17,11 @@ namespace CommandProj
     /// </summary>
     public partial class MainWindow : Window
     {
+        BankContext bContext;
         public MainWindow()
         {
+            bContext = new BankContext();
+            bContext.Database.EnsureCreated();
             InitializeComponent();
         }
     }
