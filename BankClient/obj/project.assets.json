@@ -214,23 +214,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\andre\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Tolik\\.nuget\\packages\\": {},
+    "D:\\Microsoft Visual Studio1\\SDK\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "W:\\repos\\CommandProj\\BankClient\\BankClient.csproj",
+      "projectUniqueName": "D:\\TOP командный проект\\CommandProj--master\\BankClient\\BankClient.csproj",
       "projectName": "BankClient",
-      "projectPath": "W:\\repos\\CommandProj\\BankClient\\BankClient.csproj",
-      "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
-      "outputPath": "W:\\repos\\CommandProj\\BankClient\\obj\\",
+      "projectPath": "D:\\TOP командный проект\\CommandProj--master\\BankClient\\BankClient.csproj",
+      "packagesPath": "C:\\Users\\Tolik\\.nuget\\packages\\",
+      "outputPath": "D:\\TOP командный проект\\CommandProj--master\\BankClient\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "D:\\Microsoft Visual Studio1\\SDK\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Tolik\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -239,14 +239,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj": {
-              "projectPath": "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj"
+            "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj": {
+              "projectPath": "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj"
             }
           }
         }
@@ -261,7 +262,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -282,7 +283,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
