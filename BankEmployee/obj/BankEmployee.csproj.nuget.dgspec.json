@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\TOP командный проект\\CommandProj--master\\BankEmployee\\BankEmployee.csproj": {}
+    "W:\\repos\\CommandProj\\BankEmployee\\BankEmployee.csproj": {}
   },
   "projects": {
-    "D:\\TOP командный проект\\CommandProj--master\\BankEmployee\\BankEmployee.csproj": {
+    "W:\\repos\\CommandProj\\BankEmployee\\BankEmployee.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TOP командный проект\\CommandProj--master\\BankEmployee\\BankEmployee.csproj",
+        "projectUniqueName": "W:\\repos\\CommandProj\\BankEmployee\\BankEmployee.csproj",
         "projectName": "BankEmployee",
-        "projectPath": "D:\\TOP командный проект\\CommandProj--master\\BankEmployee\\BankEmployee.csproj",
-        "packagesPath": "C:\\Users\\Tolik\\.nuget\\packages\\",
-        "outputPath": "D:\\TOP командный проект\\CommandProj--master\\BankEmployee\\obj\\",
+        "projectPath": "W:\\repos\\CommandProj\\BankEmployee\\BankEmployee.csproj",
+        "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+        "outputPath": "W:\\repos\\CommandProj\\BankEmployee\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\Microsoft Visual Studio1\\SDK\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tolik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,15 +26,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj": {
-                "projectPath": "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj"
+              "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj": {
+                "projectPath": "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj"
               }
             }
           }
@@ -49,7 +48,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -70,24 +69,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj": {
+    "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj",
+        "projectUniqueName": "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj",
         "projectName": "BankUser",
-        "projectPath": "D:\\TOP командный проект\\CommandProj--master\\BankUser\\BankUser.csproj",
-        "packagesPath": "C:\\Users\\Tolik\\.nuget\\packages\\",
-        "outputPath": "D:\\TOP командный проект\\CommandProj--master\\BankUser\\obj\\",
+        "projectPath": "W:\\repos\\CommandProj\\BankUser\\BankUser.csproj",
+        "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+        "outputPath": "W:\\repos\\CommandProj\\BankUser\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\Microsoft Visual Studio1\\SDK\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tolik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -96,15 +95,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\TOP командный проект\\CommandProj--master\\Contracts\\Contracts.csproj": {
-                "projectPath": "D:\\TOP командный проект\\CommandProj--master\\Contracts\\Contracts.csproj"
+              "W:\\repos\\CommandProj\\Contracts\\Contracts.csproj": {
+                "projectPath": "W:\\repos\\CommandProj\\Contracts\\Contracts.csproj"
               }
             }
           }
@@ -119,7 +117,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -150,24 +148,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\TOP командный проект\\CommandProj--master\\Contracts\\Contracts.csproj": {
+    "W:\\repos\\CommandProj\\Contracts\\Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\TOP командный проект\\CommandProj--master\\Contracts\\Contracts.csproj",
+        "projectUniqueName": "W:\\repos\\CommandProj\\Contracts\\Contracts.csproj",
         "projectName": "Contracts",
-        "projectPath": "D:\\TOP командный проект\\CommandProj--master\\Contracts\\Contracts.csproj",
-        "packagesPath": "C:\\Users\\Tolik\\.nuget\\packages\\",
-        "outputPath": "D:\\TOP командный проект\\CommandProj--master\\Contracts\\obj\\",
+        "projectPath": "W:\\repos\\CommandProj\\Contracts\\Contracts.csproj",
+        "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+        "outputPath": "W:\\repos\\CommandProj\\Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\Microsoft Visual Studio1\\SDK\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Tolik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -176,7 +174,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -195,7 +192,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -216,7 +213,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
