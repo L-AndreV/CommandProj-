@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommandProj.Models;
+using Newtonsoft.Json.Linq;
 
 namespace CommandProj
 {
@@ -22,7 +23,22 @@ namespace CommandProj
         {
             bContext = new BankContext();
             bContext.Database.EnsureCreated();
-            InitializeComponent();
+            //fillCounties();
+            InitializeComponent();           
         }
+
+        //private void fillCounties()
+        //{
+        //    JObject jsonObject = JObject.Parse(CountriesData.CoData);
+        //    JArray tarr = (JArray)jsonObject["co"];
+
+        //    int index = 0;
+        //    foreach(var con in tarr)
+        //    {
+        //        bContext.Countries.Add(new Country {CountryId=index, Name = con["name"]["common"].ToString(), PhoneCode = con["idd"]["root"].ToString() });
+        //        index++;
+        //        bContext.SaveChanges();
+        //    }
+        //}
     }
 }
