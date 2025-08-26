@@ -1,10 +1,14 @@
-﻿namespace Contracts
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Contracts
 {
-    public abstract class BaseContract //Базовый контракт(и запрос, и ответ)
+    public abstract class BaseContract
     {
-        public string ContractType { get; set; } //Тип контракта(обязательно заполнять в каждом классе, нужен для обработки)
-        public string ReplyQueue { get; set; } //Очередь для ответа(только если нужен ответ)
-        public Guid SessionToken { get; set; } //Токен сессии(обязательно заполнять для идентификации пользователя)
+        public string RequestType { get; set; } = "";
+        public string ReplyQueue { get; set; } = "";
     }
 }
-

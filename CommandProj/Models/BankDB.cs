@@ -126,11 +126,6 @@ namespace CommandProj.Models
                 .HasMany<Account>()
                 .WithOne()
                 .HasForeignKey(b => b.AccountId);
-
-            modelBuilder.Entity<Loan>()
-                .HasOne<Branch>()
-                .WithMany()
-                .HasForeignKey(l => l.BranchId);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -172,7 +167,6 @@ namespace CommandProj.Models
         public int UserId { get; set; }
         public decimal Amount { get; set; }
         public decimal InterestRate { get; set; }
-        public int BranchId { get; set; }
         public DateTime IssueDate { get; set; }
     }
 
