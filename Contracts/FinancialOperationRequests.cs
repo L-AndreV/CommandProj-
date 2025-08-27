@@ -3,7 +3,7 @@
     public class LoanApplicationRequest : BaseContract //Запрос на одобрение кредита
     {
         public LoanApplicationRequest() => ContractType = nameof(LoanApplicationRequest);
-        public decimal Amount { get; set; }
+        public int Amount { get; set; }
         public int AccountId { get; set; }
         public int BranchId { get; set; }
     }

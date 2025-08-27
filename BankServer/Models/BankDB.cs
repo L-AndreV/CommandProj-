@@ -7,6 +7,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using System.Configuration;
 
 
 namespace CommandProj.Models
@@ -25,7 +26,11 @@ namespace CommandProj.Models
         public DbSet<EmployeeAuthData> EmployeeAuthData { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<CreditStatement> CreditStatements { get; set; }
-
+        private DbProvider Provider;
+        public BankContext(DbProvider provider = 0)
+        {
+            Provider = provider;
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
@@ -132,10 +137,17 @@ namespace CommandProj.Models
                 .WithMany()
                 .HasForeignKey(l => l.BranchId);
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) //Выбор провайдера настраивается в App.config
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-STO09GR\\SQLEXPRESS;Initial Catalog=BankApp;Integrated Security=True;Encrypt=False");
-            //optionsBuilder.UseSqlite("Data Source=Tv1.db");
+            switch (Provider)
+            {
+                case DbProvider.SQLite:
+                    optionsBuilder.UseSqlite(ConfigurationManager.ConnectionStrings["SQLite"].ToString());
+                    break;
+                case DbProvider.SQLServer:
+                    optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["SQLServer"].ToString());
+                    break;
+            }
         }
     }
     public class User
@@ -246,5 +258,10 @@ namespace CommandProj.Models
         public int CountryId { get; set; }
         public string Name { get; set; }
         public string PhoneCode { get; set; }
+    }
+    public enum DbProvider
+    {
+        SQLite,
+        SQLServer
     }
 }

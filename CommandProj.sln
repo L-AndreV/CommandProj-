@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankClient", "BankClient\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankEmployee", "BankEmployee\BankEmployee.csproj", "{0BB55AEC-3CD3-42A2-A315-5CA52728FEAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankServer", "BankServer\BankServer.csproj", "{355ACEC4-896B-4BA7-87C4-29CEB0373A38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0BB55AEC-3CD3-42A2-A315-5CA52728FEAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BB55AEC-3CD3-42A2-A315-5CA52728FEAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BB55AEC-3CD3-42A2-A315-5CA52728FEAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{355ACEC4-896B-4BA7-87C4-29CEB0373A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{355ACEC4-896B-4BA7-87C4-29CEB0373A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{355ACEC4-896B-4BA7-87C4-29CEB0373A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{355ACEC4-896B-4BA7-87C4-29CEB0373A38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,8 @@
     public class AuthReply : BaseContract
     {
         public AuthReply() => ContractType = nameof(AuthReply);
+        public bool IsAuthorized { get; set; }
+        public string errorMessage { get; set; }
         //Поле с токеном сессии вшито в базовый контракт(сюда добавлять не надо)
     }
     public class ClientInfoReply : BaseContract

@@ -11,7 +11,7 @@
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
-        public int CountryId { get; set; }
+        public string Country { get; set; }
         public bool isEmployee { get; set; } //true - если данные запрашивает сотрудник
     }
     public class LoginRequest : BaseContract //Запрос для входа

@@ -4,7 +4,7 @@
     {
         public string ContractType { get; set; } //Тип контракта(обязательно заполнять в каждом классе, нужен для обработки)
         public string ReplyQueue { get; set; } //Очередь для ответа(только если нужен ответ)
-        public Guid SessionToken { get; set; } //Токен сессии(обязательно заполнять для идентификации пользователя)
+        public string SessionToken { get; set; } //Токен сессии(обязательно заполнять для идентификации пользователя)
     }
 }
 
