@@ -13,6 +13,7 @@ using CommandProj.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BankServer
 {
@@ -70,7 +71,7 @@ namespace BankServer
                 throw;
             }
         }
-        private async Task SendReplyAsync(BaseContract reply, BaseContract originalRequest)
+        private async Task SendReplyAsync(BaseContract reply, BaseContract originalRequest, bool isEmployee = false)
         {
             try
             {
@@ -79,15 +80,37 @@ namespace BankServer
                 var body = Encoding.UTF8.GetBytes(json);
 
                 // Используем очередь из оригинального запроса
-                await _channel.BasicPublishAsync(
-                    exchange: "",
-                    routingKey: originalRequest.ReplyQueue,  // ← Очередь клиента!
-                    mandatory: true,
-                    body: body
-                );
+                if(isEmployee) 
+                {
+                    foreach (var queue in _tokenManager.GetEmployeeQueues((int)_tokenManager.GetEmployeeId(originalRequest.SessionToken)))
+                    {
+                        await _channel.BasicPublishAsync(
+                            exchange: "",
+                            routingKey: queue,  // ← Очередь сотрудника!
+                            mandatory: true,
+                            body: body
+                        );
 
-                _logger.LogInformation("Ответ отправлен в очередь {Queue}: {MessageType}",
-                    originalRequest.ReplyQueue);
+                        _logger.LogInformation("Ответ отправлен в очередь {Queue}: {MessageType}",
+                            queue);
+                    }
+                }
+                else
+                {
+                    foreach (var queue in _tokenManager.GetClientQueues((int)_tokenManager.GetClientId(originalRequest.SessionToken)))
+                    {
+                        await _channel.BasicPublishAsync(
+                            exchange: "",
+                            routingKey: queue,  // ← Очередь клиента!
+                            mandatory: true,
+                            body: body
+                        );
+
+                        _logger.LogInformation("Ответ отправлен в очередь {Queue}: {MessageType}",
+                            queue);
+                    }
+                }
+                        
             }
             catch (Exception ex)
             {
@@ -136,6 +159,21 @@ namespace BankServer
                             await HandleLoginAsync((LoginRequest)contract);
                             break;
                         }
+                    case "TransactionRequest":
+                        {
+                            await HandleTransactionAsync((TransactionRequest)contract);
+                            break;
+                        }
+                    case "GetDataRequest":
+                        {
+                            await HandleGetDataAsync((GetDataRequest)contract);
+                            break;
+                        }
+                    case "ApproveLoanRequest":
+                        {
+                            await HandleApproveLoanAsync((ApproveLoanRequest)contract);
+                            break;
+                        }
                     default:
                         {
 
@@ -144,24 +182,187 @@ namespace BankServer
                 }
             }
         }
+        private async Task HandleApproveLoanAsync(ApproveLoanRequest request)
+        {
+            CreditStatement statement;
+            var id = _tokenManager.GetEmployeeId(request.SessionToken);
+            if (id != null)
+            {
+                var user = await _context.Employees.FirstOrDefaultAsync(u => u.EmployeeId == id);
+                if (user != null)
+                {
+                    var creditStatement = await _context.CreditStatements.FirstOrDefaultAsync(c => c.StatementId == request.StatementId);
+                    if (creditStatement != null)
+                    {
+                        if(request.IsApproved && await _context.Accounts.AnyAsync(a => a.UserId == creditStatement.UserId))
+                        {
+                            creditStatement.Status = "Кредит одобрен";
+                            Loan loan = new()
+                            {
+                                Amount = creditStatement.Amount,
+                                BranchId = creditStatement.BranchId,
+                                InterestRate = _random.Next(100, 251) / 10.0m,
+                                IssueDate = DateTime.UtcNow,
+                                UserId = creditStatement.UserId
+                            };
+                            _context.Loans.Add(loan);
+                            CreditHistory history = await _context.CreditHistories.FirstOrDefaultAsync(c => c.UserId == creditStatement.UserId);
+                            if (history == null)
+                            {
+                                history = new CreditHistory()
+                                {
+                                    UserId = creditStatement.UserId,
+                                    AverageLoanSize = 0,
+                                    CurrentLoansCount = 0,
+                                    RepaidLoansCount = 0,
+                                };
+                                _context.CreditHistories.Add(history);
+                            }
+                            history.CurrentLoansCount++;
+                            history.AverageLoanSize += loan.Amount;
+                            var accounts = _context.Accounts.Where(a => a.UserId == creditStatement.UserId).ToList();
+                            accounts[_random.Next(_context.Accounts.Count())].Balance += loan.Amount;
+                            //reply = new AuthReply
+                            //{
+                            //    
+                            //};
+                            //await SendReplyAsync(reply, request);
+
+                        }
+                        else
+                        {
+                            creditStatement.Status = "Кредит отклонён";
+                            //reply = new AuthReply
+                            //{
+                            //    
+                            //};
+                            //await SendReplyAsync(reply, request);
+
+                        }
+                        await _context.SaveChangesAsync();
+                        return;
+                    }
+                }
+            }
+            //reply = new AuthReply
+            //{
+            //    
+            //};
+            //await SendReplyAsync(reply, request);
+            return;
+        }
+        private async Task HandleGetDataAsync(GetDataRequest request)
+        {
+            //OperationReply reply;
+            if(request.isEmployee)
+            {
+                var id = _tokenManager.GetEmployeeId(request.SessionToken);
+                if (id != null)
+                {
+                    var user = await _context.Employees.FirstOrDefaultAsync(u => u.EmployeeId == id);
+                    if (user != null)
+                    {
+                        //reply = new AuthReply
+                        //{
+                        //    
+                        //};
+                        //await SendReplyAsync(reply, request);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                var id = _tokenManager.GetClientId(request.SessionToken);
+                if (id != null)
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+                    if (user != null)
+                    {
+                        //reply = new AuthReply
+                        //{
+                        //    
+                        //};
+                        //await SendReplyAsync(reply, request);
+                        return;
+                    }
+                }
+            }
+            //reply = new AuthReply
+            //{
+            //    
+            //};
+            //await SendReplyAsync(reply, request);
+            return;
+        }
+        private async Task HandleTransactionAsync(TransactionRequest request)
+        {
+            //OperationReply reply;
+            var id = _tokenManager.GetClientId(request.SessionToken);
+            if (id != null)
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+                if (user != null)
+                {
+                    var senderAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == request.SendertAccountId);
+                    var recipientAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == request.RecipientAccountId);
+                    if (senderAccount != null && recipientAccount != null)
+                    {
+                        if(senderAccount.UserId == user.UserId && senderAccount.Balance >= request.Amount)
+                        {
+                            senderAccount.Balance -= request.Amount;
+                            recipientAccount.Balance += request.Amount;
+                            Transaction transaction = new()
+                            {
+                                Amount = request.Amount,
+                                SenderAccountId = senderAccount.UserId,
+                                RecipientAccountId = recipientAccount.UserId,
+                                Date = DateTime.UtcNow,
+                                MessageToRecipient = request.Message,
+                            };
+                            _context.Transactions.Add(transaction);
+                            await _context.SaveChangesAsync();
+                            foreach(var recipient in _tokenManager.GetClientQueues(recipientAccount.UserId))
+                            {
+                                //reply = new AuthReply
+                                //{
+                                //    
+                                //};
+                                //await SendReplyAsync(reply, request);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            //reply = new AuthReply
+            //{
+            //    
+            //};
+            //await SendReplyAsync(reply, request);
+            return;
+        }
         private async Task HandleLoanApplicationAsync(LoanApplicationRequest request)
         {
             //OperationReply reply;
             var id = _tokenManager.GetClientId(request.SessionToken);
             if (id != null)
             {
-                var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
                 if (user != null)
                 {
+                    var branches = await _context.Branches.Select(b => b.BranchId).ToListAsync();
+
                     var statement = new CreditStatement()
                     {
                         UserId = (int)id,
                         Amount = request.Amount,
-                        BranchId = _context.Branches.Select(b => b.BranchId).ToList()[_random.Next(_context.Branches.Count())],
+                        BranchId = branches[_random.Next(branches.Count)],
                         Date = DateTime.UtcNow,
                         Status = "На рассмотрении"
                     };
                     _context.CreditStatements.Add(statement);
+                    await _context.SaveChangesAsync();
                     //reply = new AuthReply
                     //{
                     //    
@@ -183,7 +384,7 @@ namespace BankServer
             var id = _tokenManager.GetClientId(request.SessionToken);
             if (id != null)
             {
-                var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
                 if (user != null)
                 {
                     var account = new Account()
@@ -192,6 +393,7 @@ namespace BankServer
                         Balance = 0,
                     };
                     _context.Accounts.Add(account);
+                    await _context.SaveChangesAsync();
                     //reply = new AuthReply
                     //{
                     //    
@@ -213,10 +415,10 @@ namespace BankServer
             var id = _tokenManager.GetClientId(request.SessionToken);
             if (id != null)
             {
-                var user = _context.Users.FirstOrDefault(u => u.UserId == id);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
                 if (user != null)
                 {
-                    var account = _context.Accounts.FirstOrDefault(a => a.AccountId == request.AccountId);
+                    var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountId == request.AccountId);
                     if (account != null && account.UserId == id && account.Balance >= request.Amount)
                     {
                         var deposit = new Deposit()
@@ -227,6 +429,7 @@ namespace BankServer
                         };
                         _context.Deposits.Add(deposit);
                         account.Balance -= request.Amount;
+                        await _context.SaveChangesAsync();
                         //reply = new AuthReply
                         //{
                         //    
@@ -272,7 +475,7 @@ namespace BankServer
                 {
                     var user = new User()
                     {
-                        UserId = GetFirstAvailableId(_context.Users.Distinct().Select(u => u.UserId).ToList()),
+                        UserId = GetFirstAvailableId(await _context.Users.Distinct().Select(u => u.UserId).ToListAsync()),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
                         Phone = request.Phone,
@@ -285,22 +488,31 @@ namespace BankServer
                         Password = request.Password
                     };
                     _context.ClientAuthData.Add(authData);
+                    var history = new CreditHistory()
+                    {
+                        UserId = user.UserId,
+                        AverageLoanSize = 0,
+                        CurrentLoansCount = 0,
+                        RepaidLoansCount = 0,
+                    };
+                    _context.CreditHistories.Add(history);
+                    await _context.SaveChangesAsync();
                     reply = new AuthReply
                     {
                         IsAuthorized = true,
-                        SessionToken = _tokenManager.CreateClientToken(user.UserId, TimeSpan.FromMinutes(10))
+                        SessionToken = _tokenManager.CreateClientToken(user.UserId, request.ReplyQueue, TimeSpan.FromMinutes(10))
                     };
                 }
                 else
                 {
                     var employee = new Employee()
                     {
-                        EmployeeId = GetFirstAvailableId(_context.Employees.Distinct().Select(e => e.EmployeeId).ToList()),
+                        EmployeeId = GetFirstAvailableId(await _context.Employees.Distinct().Select(e => e.EmployeeId).ToListAsync()),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
                         AccessLevel = _random.Next(1, 4).ToString(),
                         Phone = request.Phone,
-                        BranchId = _context.Branches.Select(b => b.BranchId).ToList()[_random.Next(_context.Branches.Count())],
+                        BranchId = (await _context.Branches.Select(b => b.BranchId).ToListAsync())[_random.Next(_context.Branches.Count())],
                         Country = request.Country,
                         HireDate = DateTime.UtcNow
                     };
@@ -311,12 +523,14 @@ namespace BankServer
                         Password = request.Password
                     };
                     _context.EmployeeAuthData.Add(authData);
+                    await _context.SaveChangesAsync();
                     reply = new AuthReply
                     {
                         IsAuthorized = true,
-                        SessionToken = _tokenManager.CreateEmployeeToken(employee.EmployeeId, TimeSpan.FromMinutes(10))
+                        SessionToken = _tokenManager.CreateEmployeeToken(employee.EmployeeId, request.ReplyQueue, TimeSpan.FromMinutes(10))
                     };
                 }
+                await _context.SaveChangesAsync();
                 await SendReplyAsync(reply, request);
                 return;
             }
@@ -325,8 +539,8 @@ namespace BankServer
         {
             if (request.isEmployee)
             {
-                var auth = _context.EmployeeAuthData.FirstOrDefault(e => e.Phone == request.Phone);
-                var employee = _context.Employees.FirstOrDefault(e => e.Phone == request.Phone);
+                var auth = await _context.EmployeeAuthData.FirstOrDefaultAsync(e => e.Phone == request.Phone);
+                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Phone == request.Phone);
                 if (auth == null ||
                     auth.Password != request.Password ||
                     employee == null)
@@ -344,7 +558,7 @@ namespace BankServer
                     var reply = new AuthReply
                     {
                         IsAuthorized = true,
-                        SessionToken = _tokenManager.CreateEmployeeToken(employee.EmployeeId, TimeSpan.FromMinutes(10))
+                        SessionToken = _tokenManager.CreateEmployeeToken(employee.EmployeeId, request.ReplyQueue, TimeSpan.FromMinutes(10))
                     };
                     await SendReplyAsync(reply, request);
                     return;
@@ -352,8 +566,8 @@ namespace BankServer
             }
             else
             {
-                var auth = _context.ClientAuthData.FirstOrDefault(e => e.Phone == request.Phone);
-                var client = _context.Users.FirstOrDefault(e => e.Phone == request.Phone);
+                var auth = await _context.ClientAuthData.FirstOrDefaultAsync(e => e.Phone == request.Phone);
+                var client = await _context.Users.FirstOrDefaultAsync(e => e.Phone == request.Phone);
                 if (auth == null ||
                     auth.Password != request.Password ||
                     client == null)
@@ -371,7 +585,7 @@ namespace BankServer
                     var reply = new AuthReply
                     {
                         IsAuthorized = true,
-                        SessionToken = _tokenManager.CreateClientToken(client.UserId, TimeSpan.FromMinutes(10))
+                        SessionToken = _tokenManager.CreateClientToken(client.UserId, request.ReplyQueue, TimeSpan.FromMinutes(10))
                     };
                     await SendReplyAsync(reply, request);
                     return;

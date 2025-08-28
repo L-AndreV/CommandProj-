@@ -13,22 +13,24 @@ public class TokenManager
             TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(10));
     }
 
-    public string CreateClientToken(int userId, TimeSpan lifetime)
+    public string CreateClientToken(int userId, string queueName, TimeSpan lifetime)
     {
         var token = Guid.NewGuid().ToString("N");
         _ClientTokens[token] = new TokenInfo
         {
             UserId = userId,
+            QueueName = queueName,
             ExpiresAt = DateTime.UtcNow.Add(lifetime)
         };
         return token;
     }
-    public string CreateEmployeeToken(int userId, TimeSpan lifetime)
+    public string CreateEmployeeToken(int userId, string queueName, TimeSpan lifetime)
     {
         var token = Guid.NewGuid().ToString("N");
         _EmployeeTokens[token] = new TokenInfo
         {
             UserId = userId,
+            QueueName = queueName,
             ExpiresAt = DateTime.UtcNow.Add(lifetime)
         };
         return token;
@@ -65,6 +67,14 @@ public class TokenManager
         }
         return null;
     }
+    public List<string> GetClientQueues(int UserId)
+    {
+        return _ClientTokens.Where(c => c.Value.UserId == UserId).Select(v => v.Value.QueueName).ToList();
+    }
+    public List<string> GetEmployeeQueues(int UserId)
+    {
+        return _EmployeeTokens.Where(c => c.Value.UserId == UserId).Select(v => v.Value.QueueName).ToList();
+    }
     private void CleanupExpired(object state)
     {
         var now = DateTime.UtcNow;
@@ -90,5 +100,6 @@ public class TokenManager
 public class TokenInfo
 {
     public int UserId { get; set; }
+    public string QueueName {  get; set; }
     public DateTime ExpiresAt { get; set; }
 }
