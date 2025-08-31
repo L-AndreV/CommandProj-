@@ -1,0 +1,459 @@
+﻿<Window x:Class="CommandProj.Worker.Overview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CreditFlow - Обзор кредитов" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#FF2D2D30">
+
+    <Window.Resources>
+        <!-- Стили -->
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="MetricCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="100"/>
+        </Style>
+
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="StatusIndicator" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Добавляем недостающий стиль -->
+        <Style x:Key="ApplicationRow" TargetType="Border">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,2"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Боковая панель -->
+        <Border Background="#2C3E50" Grid.Column="0">
+            <StackPanel Margin="15">
+                <!-- Профиль сотрудника -->
+                <Border Background="#34495E" CornerRadius="10" Padding="15" Margin="0,0,0,20">
+                    <StackPanel>
+                        <Ellipse Width="80" Height="80" Fill="#3498DB" HorizontalAlignment="Center">
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#BDC3C7" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                        </Ellipse>
+                        <TextBlock Text="Алексей Кредитов" Foreground="White" FontSize="16" FontWeight="Bold" 
+                                   HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                        <TextBlock Text="Финансовый аналитик" Foreground="#BDC3C7" FontSize="12"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Меню обзора -->
+                <StackPanel>
+                    <Button Content="📊 Обзор" Style="{StaticResource RoundedButton}" Background="#3498DB" 
+                            Foreground="White" HorizontalAlignment="Stretch"/>
+                    <Button Content="📈 Динамика" Style="{StaticResource RoundedButton}" Background="Transparent" 
+                            Foreground="White" BorderBrush="#BDC3C7" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                    <Button Content="📋 Продукты" Style="{StaticResource RoundedButton}" Background="Transparent" 
+                            Foreground="White" BorderBrush="#BDC3C7" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                    <Button Content="👥 Клиенты" Style="{StaticResource RoundedButton}" Background="Transparent" 
+                            Foreground="White" BorderBrush="#BDC3C7" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                    <Button Content="⚠️ Риски" Style="{StaticResource RoundedButton}" Background="Transparent" 
+                            Foreground="White" BorderBrush="#BDC3C7" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                    <Button Content="📅 Календарь" Style="{StaticResource RoundedButton}" Background="Transparent" 
+                            Foreground="White" BorderBrush="#BDC3C7" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+
+                <!-- Быстрая статистика -->
+                <Border Style="{StaticResource CardStyle}" Background="#34495E" Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Сегодня" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="Новых заявок: 24" Foreground="#27AE60" FontSize="12"/>
+                            <TextBlock Text="Одобрено: ₽ 8.2 млн" Foreground="#3498DB" FontSize="12"/>
+                            <TextBlock Text="Выдано: ₽ 5.7 млн" Foreground="#9B59B6" FontSize="12"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- Основной контент - ОБЗОР -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <!-- Заголовок и дашборд -->
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Обзор кредитного портфеля" FontWeight="Bold" FontSize="20" Margin="0,0,0,15"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox Width="150" Margin="0,0,10,0" SelectedIndex="0">
+                                <ComboBoxItem Content="За месяц"/>
+                                <ComboBoxItem Content="За квартал"/>
+                                <ComboBoxItem Content="За год"/>
+                            </ComboBox>
+                            <ComboBox Width="200" Margin="0,0,10,0" SelectedIndex="0">
+                                <ComboBoxItem Content="Все отделения"/>
+                                <ComboBoxItem Content="Москва"/>
+                                <ComboBoxItem Content="Санкт-Петербург"/>
+                            </ComboBox>
+                            <Button Content="📊 Экспорт отчета" Style="{StaticResource RoundedButton}" Background="#27AE60"/>
+                            <Button Content="🔄 Обновить" Style="{StaticResource RoundedButton}" Background="#3498DB" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Ключевые метрики портфеля -->
+                <TextBlock Text="Ключевые показатели портфеля" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
+
+                <UniformGrid Columns="4" Rows="1" Margin="0,0,0,20">
+                    <Border Style="{StaticResource MetricCard}" Background="#E8F5E9">
+                        <StackPanel>
+                            <TextBlock Text="Общий портфель" Foreground="#7F8C8D" FontSize="12"/>
+                            <TextBlock Text="₽ 4,256,789,123" Foreground="#2E7D32" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="+5.2% за месяц" Foreground="#27AE60" FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource MetricCard}" Background="#FFEBEE">
+                        <StackPanel>
+                            <TextBlock Text="Просрочка (NPL)" Foreground="#7F8C8D" FontSize="12"/>
+                            <TextBlock Text="2.3%" Foreground="#C62828" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="₽ 98,456,789" Foreground="#E74C3C" FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource MetricCard}" Background="#E3F2FD">
+                        <StackPanel>
+                            <TextBlock Text="Средняя ставка" Foreground="#7F8C8D" FontSize="12"/>
+                            <TextBlock Text="11.8%" Foreground="#1565C0" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="+0.3% к прошлому месяцу" Foreground="#3498DB" FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource MetricCard}" Background="#FFF3E0">
+                        <StackPanel>
+                            <TextBlock Text="Рентабельность" Foreground="#7F8C8D" FontSize="12"/>
+                            <TextBlock Text="18.7%" Foreground="#EF6C00" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="Выше плана на 2.1%" Foreground="#F39C12" FontSize="11"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+                <!-- Графики и визуализации -->
+                <TextBlock Text="Визуализация данных" Style="{StaticResource SectionHeader}"/>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Динамика портфеля -->
+                    <Border Style="{StaticResource CardStyle}" Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+                        <StackPanel>
+                            <TextBlock Text="Динамика кредитного портфеля" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <Border Background="#F5F5F5" Height="200" CornerRadius="5">
+                                <TextBlock Text="[График роста портфеля]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#7F8C8D"/>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <TextBlock Text="Ипотека" Foreground="#E74C3C" FontSize="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="Автокредиты" Foreground="#3498DB" FontSize="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="Потребкредиты" Foreground="#9B59B6" FontSize="11"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Структура портфеля -->
+                    <Border Style="{StaticResource CardStyle}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Структура портфеля" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Background="#F5F5F5" Height="150" Width="150" CornerRadius="75" Grid.Column="0"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="[Диаграмма]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#7F8C8D"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Rectangle Width="10" Height="10" Fill="#E74C3C" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Ипотека: 58%" FontSize="11"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                        <Rectangle Width="10" Height="10" Fill="#3498DB" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Автокредиты: 25%" FontSize="11"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                        <Rectangle Width="10" Height="10" Fill="#9B59B6" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Потребкредиты: 12%" FontSize="11"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                        <Rectangle Width="10" Height="10" Fill="#F39C12" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Прочие: 5%" FontSize="11"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Уровень просрочки -->
+                    <Border Style="{StaticResource CardStyle}" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="Уровень просрочки по продуктам" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <Border Background="#F5F5F5" Height="150" CornerRadius="5">
+                                <TextBlock Text="[График просрочки]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#7F8C8D"/>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <TextBlock Text="Ипотека: 1.2%" Foreground="#E74C3C" FontSize="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="Авто: 3.8%" Foreground="#F39C12" FontSize="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="Потреб: 4.5%" Foreground="#C62828" FontSize="11"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- География выдачи -->
+                    <Border Style="{StaticResource CardStyle}" Grid.Row="1" Grid.Column="1">
+                        <StackPanel>
+                            <TextBlock Text="География выдачи кредитов" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <Border Background="#F5F5F5" Height="150" CornerRadius="5">
+                                <TextBlock Text="[Карта регионов]" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#7F8C8D"/>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <TextBlock Text="Москва: 45%" Foreground="#3498DB" FontSize="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="СПб: 22%" Foreground="#9B59B6" FontSize="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="Регионы: 33%" Foreground="#27AE60" FontSize="11"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Последние операции -->
+                <TextBlock Text="Последние кредитные операции" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
+
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="60"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Дата" FontWeight="Bold" Grid.Column="0"/>
+                            <TextBlock Text="Клиент" FontWeight="Bold" Grid.Column="1" Margin="10,0,0,0"/>
+                            <TextBlock Text="Тип кредита" FontWeight="Bold" Grid.Column="2"/>
+                            <TextBlock Text="Сумма" FontWeight="Bold" Grid.Column="3"/>
+                            <TextBlock Text="Ставка" FontWeight="Bold" Grid.Column="4"/>
+                            <TextBlock Text="Статус" FontWeight="Bold" Grid.Column="5"/>
+                        </Grid>
+
+                        <StackPanel>
+                            <!-- Операция 1 -->
+                            <Border Style="{StaticResource ApplicationRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="15.12.2023" Grid.Column="0"/>
+                                    <TextBlock Text="Иванов П.С." Grid.Column="1" Margin="10,0,0,0"/>
+                                    <TextBlock Text="Ипотека" Grid.Column="2"/>
+                                    <TextBlock Text="₽ 2,500,000" Grid.Column="3"/>
+                                    <TextBlock Text="11.2%" Grid.Column="4"/>
+                                    <Border Background="#E8F5E9" Style="{StaticResource StatusIndicator}">
+                                        <TextBlock Text="Одобрено" Foreground="#27AE60" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!-- Операция 2 -->
+                            <Border Style="{StaticResource ApplicationRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="14.12.2023" Grid.Column="0"/>
+                                    <TextBlock Text="Петрова А.В." Grid.Column="1" Margin="10,0,0,0"/>
+                                    <TextBlock Text="Автокредит" Grid.Column="2"/>
+                                    <TextBlock Text="₽ 850,000" Grid.Column="3"/>
+                                    <TextBlock Text="13.5%" Grid.Column="4"/>
+                                    <Border Background="#FFEBEE" Style="{StaticResource StatusIndicator}">
+                                        <TextBlock Text="На рассмотрении" Foreground="#E74C3C" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!-- Операция 3 -->
+                            <Border Style="{StaticResource ApplicationRow}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="14.12.2023" Grid.Column="0"/>
+                                    <TextBlock Text="Сидоров М.К." Grid.Column="1" Margin="10,0,0,0"/>
+                                    <TextBlock Text="Потребкредит" Grid.Column="2"/>
+                                    <TextBlock Text="₽ 120,000" Grid.Column="3"/>
+                                    <TextBlock Text="16.8%" Grid.Column="4"/>
+                                    <Border Background="#FFF3E0" Style="{StaticResource StatusIndicator}">
+                                        <TextBlock Text="Выдан" Foreground="#F39C12" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Прогнозы и аналитика -->
+                <TextBlock Text="Аналитика и прогнозы" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Топ продуктов -->
+                    <Border Style="{StaticResource CardStyle}" Grid.Row="0">
+                        <StackPanel>
+                            <TextBlock Text="🏆 Топ-5 продуктов по доходности" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Border Background="#F8F9FA" CornerRadius="5" Padding="10" Margin="0,0,0,5">
+                                    <Grid>
+                                        <TextBlock Text="1. Ипотека 'Комфорт'" FontWeight="Bold"/>
+                                        <TextBlock Text="Доход: ₽ 45.2 млн" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#F8F9FA" CornerRadius="5" Padding="10" Margin="0,5,0,5" Grid.Row="1">
+                                    <Grid>
+                                        <TextBlock Text="2. Автокредит 'Стандарт'" FontWeight="Bold"/>
+                                        <TextBlock Text="Доход: ₽ 28.7 млн" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#F8F9FA" CornerRadius="5" Padding="10" Margin="0,5,0,5" Grid.Row="2">
+                                    <Grid>
+                                        <TextBlock Text="3. Кредитная карта 'Голд'" FontWeight="Bold"/>
+                                        <TextBlock Text="Доход: ₽ 22.1 млн" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#F8F9FA" CornerRadius="5" Padding="10" Margin="0,5,0,5" Grid.Row="3">
+                                    <Grid>
+                                        <TextBlock Text="4. Потребкредит 'Экспресс'" FontWeight="Bold"/>
+                                        <TextBlock Text="Доход: ₽ 18.3 млн" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#F8F9FA" CornerRadius="5" Padding="10" Margin="0,5,0,0" Grid.Row="4">
+                                    <Grid>
+                                        <TextBlock Text="5. Рефинансирование" FontWeight="Bold"/>
+                                        <TextBlock Text="Доход: ₽ 15.6 млн" Foreground="#27AE60" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Рекомендации -->
+                    <Border Style="{StaticResource CardStyle}" Grid.Row="1" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Text="📈 Рекомендации по развитию" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <StackPanel>
+                                <Border Background="#E8F5E9" CornerRadius="5" Padding="10" Margin="0,0,0,5">
+                                    <TextBlock Text="✅ Увеличить лимиты по ипотеке на 15% - высокий спрос" 
+                                               Foreground="#2E7D32" TextWrapping="Wrap"/>
+                                </Border>
+                                <Border Background="#FFEBEE" CornerRadius="5" Padding="10" Margin="0,5,0,5">
+                                    <TextBlock Text="⚠️ Снизить ставки по автокредитам в регионах - конкуренция растет" 
+                                               Foreground="#C62828" TextWrapping="Wrap"/>
+                                </Border>
+                                <Border Background="#E3F2FD" CornerRadius="5" Padding="10">
+                                    <TextBlock Text="💡 Запустить программу лояльности для повторных заемщиков" 
+                                               Foreground="#1565C0" TextWrapping="Wrap"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

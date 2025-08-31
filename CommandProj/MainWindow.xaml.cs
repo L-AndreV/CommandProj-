@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CommandProj.Models;
+using CommandProj;
 using Newtonsoft.Json.Linq;
 
 namespace CommandProj
@@ -18,15 +18,15 @@ namespace CommandProj
     /// </summary>
     public partial class MainWindow : Window
     {
-        BankContext bContext;
-        public MainWindow()
-        {
-            bContext = new BankContext();
-            bContext.Database.EnsureCreated();
+       // BankContext bContext;
+     //   public MainWindow()
+       // {
+          //  bContext = new BankContext();
+         //   bContext.Database.EnsureCreated();
             //fillCounties();
-            InitializeComponent();           
-        }
-
+        //    InitializeComponent();           
+      //  }
+       
         //private void fillCounties()
         //{
         //    JObject jsonObject = JObject.Parse(CountriesData.CoData);

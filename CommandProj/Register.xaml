@@ -1,0 +1,230 @@
+﻿<Window x:Class="CommandProj.Register"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CreditFlow - Регистрация" Height="816" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#FF2D2D30"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <!-- Стили -->
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputField" TargetType="TextBox">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="PasswordField" TargetType="PasswordBox">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="ComboBoxField" TargetType="ComboBox">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+
+        <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="LinkText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#3498DB"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextDecorations" Value="Underline"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Стиль для полей с placeholder -->
+        <Style x:Key="PlaceholderTextBox" TargetType="TextBox" BasedOn="{StaticResource InputField}">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левая часть - баннер -->
+        <Border Background="#2C3E50" Grid.Column="0">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border CornerRadius="20" Background="#34495E" Padding="30" Margin="20">
+                    <StackPanel>
+                        <TextBlock Text="💳" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <TextBlock Text="Bank TOP" Foreground="White" FontSize="28" FontWeight="Bold" 
+                                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                        <TextBlock Text="Онлайн банк" Foreground="#BDC3C7" FontSize="16" 
+                                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <TextBlock Text="Присоединяйтесь к ведущму банку" 
+                                   Foreground="White" FontSize="14" TextWrapping="Wrap" 
+                                   HorizontalAlignment="Center" TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Преимущества -->
+                <StackPanel Margin="40" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <TextBlock Text="✅" FontSize="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Быстрое рассмотрение заявок" Foreground="White" FontSize="13"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <TextBlock Text="✅" FontSize="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Конкурентные процентные ставки" Foreground="White" FontSize="13"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <TextBlock Text="✅" FontSize="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Онлайн-поддержка 24/7" Foreground="White" FontSize="13"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✅" FontSize="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Безопасность данных" Foreground="White" FontSize="13"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Правая часть - форма регистрации -->
+        <Border Background="White" Grid.Column="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="40" VerticalAlignment="Center">
+                    <TextBlock Text="Создать аккаунт" Foreground="#2C3E50" FontSize="24" FontWeight="Bold" 
+                               Margin="0,0,0,30" HorizontalAlignment="Center"/>
+
+                    <!-- Личные данные -->
+                    <TextBlock Text="Личные данные" Foreground="#7F8C8D" FontSize="14" FontWeight="Bold" 
+                               Margin="0,0,0,10"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0" Style="{StaticResource PlaceholderTextBox}" 
+                                 Text="Имя" Foreground="Gray"/>
+
+                        <TextBox Grid.Column="2" Style="{StaticResource PlaceholderTextBox}" 
+                                 Text="Фамилия" Foreground="Gray"/>
+                    </Grid>
+
+                    <TextBox Style="{StaticResource PlaceholderTextBox}" 
+                             Text="Электронная почта" Foreground="Gray"/>
+
+                    <TextBox Style="{StaticResource PlaceholderTextBox}" 
+                             Text="Телефон" Foreground="Gray"/>
+
+                    <!-- Пароль -->
+                    <TextBlock Text="Пароль" Foreground="#7F8C8D" FontSize="14" FontWeight="Bold" 
+                               Margin="0,20,0,10"/>
+
+                    <PasswordBox Style="{StaticResource PasswordField}" 
+                                 PasswordChar="•">
+                        <PasswordBox.Tag>
+                            <TextBlock Text="Создайте пароль" Foreground="Gray"/>
+                        </PasswordBox.Tag>
+                    </PasswordBox>
+
+                    <PasswordBox Style="{StaticResource PasswordField}" 
+                                 PasswordChar="•">
+                        <PasswordBox.Tag>
+                            <TextBlock Text="Подтвердите пароль" Foreground="Gray"/>
+                        </PasswordBox.Tag>
+                    </PasswordBox>
+
+                    <!-- Дополнительная информация -->
+                    <TextBlock Text="Дополнительная информация" Foreground="#7F8C8D" FontSize="14" FontWeight="Bold" 
+                               Margin="0,20,0,10"/>
+
+                    <ComboBox Style="{StaticResource ComboBoxField}" SelectedIndex="0">
+                        <ComboBoxItem Content="Выберите отделение"/>
+                        <ComboBoxItem Content="Москва - Центральный офис"/>
+                        <ComboBoxItem Content="Санкт-Петербург - Филиал"/>
+                        <ComboBoxItem Content="Новосибирск - Филиал"/>
+                        <ComboBoxItem Content="Екатеринбург - Филиал"/>
+                    </ComboBox>
+
+                    <ComboBox Style="{StaticResource ComboBoxField}" SelectedIndex="0">
+                        <ComboBoxItem Content="Выберите должность"/>
+                        <ComboBoxItem Content="Кредитный менеджер"/>
+                        <ComboBoxItem Content="Старший менеджер"/>
+                        <ComboBoxItem Content="Аналитик"/>
+                        <ComboBoxItem Content="Руководитель отдела"/>
+                    </ComboBox>
+
+                    <!-- Соглашения -->
+                    <CheckBox Style="{StaticResource CheckBoxStyle}">
+                        <TextBlock Text="Я принимаю условия пользовательского соглашения" 
+                                   Foreground="#2C3E50" TextWrapping="Wrap"/>
+                    </CheckBox>
+
+                    <CheckBox Style="{StaticResource CheckBoxStyle}">
+                        <TextBlock Text="Я согласен на обработку персональных данных" 
+                                   Foreground="#2C3E50" TextWrapping="Wrap"/>
+                    </CheckBox>
+
+                    <!-- Кнопка регистрации -->
+                    <Button Content="Зарегистрироваться" Style="{StaticResource RoundedButton}" 
+                            Background="#27AE60" FontSize="16" Height="50" Margin="0,10,0,20"/>
+
+                    <!-- Ссылка на вход -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Уже есть аккаунт? " Foreground="#7F8C8D" FontSize="12"/>
+                        <TextBlock Style="{StaticResource LinkText}" Text="Войти"/>
+                    </StackPanel>
+
+                    <!-- Информация о безопасности -->
+                    <Border Background="#E8F5E9" CornerRadius="5" Padding="10" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="🔒 Ваши данные защищены" Foreground="#2E7D32" FontWeight="Bold" FontSize="11"/>
+                            <TextBlock Text="Все данные шифруются и хранятся в соответствии с GDPR" 
+                                       Foreground="#27AE60" FontSize="10" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>
