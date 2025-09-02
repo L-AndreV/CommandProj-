@@ -3,8 +3,14 @@ using System.Collections.Concurrent;
 
 public class TokenManager
 {
+    //Здесь происходит работа с токенами
+    //Их генерация, обновление и проверка
     private readonly ConcurrentDictionary<string, TokenInfo> _ClientTokens = new();
     private readonly ConcurrentDictionary<string, TokenInfo> _EmployeeTokens = new();
+    //Здесь токены я привязываю к id пользователя
+    //Поэтому я создал отдельные коллекции для клиента и сотрудника
+    //Потому что иначе их id пересекались бы
+    
     private readonly Timer _cleanupTimer;
 
     public TokenManager()
@@ -75,6 +81,10 @@ public class TokenManager
     {
         return _EmployeeTokens.Where(c => c.Value.UserId == UserId).Select(v => v.Value.QueueName).ToList();
     }
+    //Так как можно зайти с разных устройств
+    //В коллекции я сохраняю и id очереди прослушивания пользователя
+    //И при отправке ему сообщения в идеале стоит перебирать все его подключения
+    //И отправлять ответ на каждое
     private void CleanupExpired(object state)
     {
         var now = DateTime.UtcNow;

@@ -17,6 +17,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BankServer
 {
+    //Я вроде постарался сделать отсеивание всех кривых запросов
     public class Server : IHostedService, IDisposable
     {
         private IConnection? _connection;
@@ -38,8 +39,9 @@ namespace BankServer
             _startTime = DateTime.UtcNow;
             _context = new(_options.Provider);
         }
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)//Вызывается автоматически(наследник интерфейса IOptions)
         {
+            //Дефолтная настройка RabbitMQ
             try
             {
                 var factory = new ConnectionFactory { HostName = "localhost" };
@@ -71,7 +73,7 @@ namespace BankServer
                 throw;
             }
         }
-        private async Task SendReplyAsync(BaseContract reply, BaseContract originalRequest, bool isEmployee = false)
+        private async Task SendReplyAsync(BaseContract reply, BaseContract originalRequest, bool isEmployee = false)//Отправка ответа пользователю
         {
             try
             {
@@ -86,7 +88,7 @@ namespace BankServer
                     {
                         await _channel.BasicPublishAsync(
                             exchange: "",
-                            routingKey: queue,  // ← Очередь сотрудника!
+                            routingKey: queue,  //Очередь сотрудника
                             mandatory: true,
                             body: body
                         );
@@ -101,7 +103,7 @@ namespace BankServer
                     {
                         await _channel.BasicPublishAsync(
                             exchange: "",
-                            routingKey: queue,  // ← Очередь клиента!
+                            routingKey: queue,  //Очередь клиента
                             mandatory: true,
                             body: body
                         );
@@ -118,7 +120,7 @@ namespace BankServer
 
             }
         }
-        private async Task ProcessMessageAsync(string json, CancellationToken ct)
+        private async Task ProcessMessageAsync(string json, CancellationToken ct)//Распределитель сообщений для обработки
         {
             BaseContract? contract;
             try
@@ -182,15 +184,17 @@ namespace BankServer
                 }
             }
         }
-        private async Task HandleApproveLoanAsync(ApproveLoanRequest request)
+        private async Task HandleApproveLoanAsync(ApproveLoanRequest request)//Подтверждение кредита сотрудником
         {
             CreditStatement statement;
+            //{
             var id = _tokenManager.GetEmployeeId(request.SessionToken);
             if (id != null)
             {
                 var user = await _context.Employees.FirstOrDefaultAsync(u => u.EmployeeId == id);
                 if (user != null)
                 {
+                    //}Здесь у меня базовая проверка токена сессии пользователя 
                     var creditStatement = await _context.CreditStatements.FirstOrDefaultAsync(c => c.StatementId == request.StatementId);
                     if (creditStatement != null)
                     {
@@ -224,7 +228,7 @@ namespace BankServer
                             accounts[_random.Next(_context.Accounts.Count())].Balance += loan.Amount;
                             //reply = new AuthReply
                             //{
-                            //    
+                            //    Это должен быть ответ, но у меня нет подходящего класса Reply 
                             //};
                             //await SendReplyAsync(reply, request);
 
@@ -234,7 +238,7 @@ namespace BankServer
                             creditStatement.Status = "Кредит отклонён";
                             //reply = new AuthReply
                             //{
-                            //    
+                            //    Это должен быть ответ, но у меня нет подходящего класса Reply
                             //};
                             //await SendReplyAsync(reply, request);
 
@@ -246,12 +250,12 @@ namespace BankServer
             }
             //reply = new AuthReply
             //{
-            //    
+            //    Это должен быть ответ, но у меня нет подходящего класса Reply
             //};
             //await SendReplyAsync(reply, request);
             return;
         }
-        private async Task HandleGetDataAsync(GetDataRequest request)
+        private async Task HandleGetDataAsync(GetDataRequest request)//По идее здесь возвращаются данные для пользователя
         {
             //OperationReply reply;
             if(request.isEmployee)
@@ -264,7 +268,7 @@ namespace BankServer
                     {
                         //reply = new AuthReply
                         //{
-                        //    
+                        //    Это должен быть ответ, но у меня нет подходящего класса Reply
                         //};
                         //await SendReplyAsync(reply, request);
                         return;
@@ -281,7 +285,7 @@ namespace BankServer
                     {
                         //reply = new AuthReply
                         //{
-                        //    
+                        //    Это должен быть ответ, но у меня нет подходящего класса Reply
                         //};
                         //await SendReplyAsync(reply, request);
                         return;
@@ -290,12 +294,12 @@ namespace BankServer
             }
             //reply = new AuthReply
             //{
-            //    
+            //    Это должен быть ответ, но у меня нет подходящего класса Reply
             //};
             //await SendReplyAsync(reply, request);
             return;
         }
-        private async Task HandleTransactionAsync(TransactionRequest request)
+        private async Task HandleTransactionAsync(TransactionRequest request)//Транзакция
         {
             //OperationReply reply;
             var id = _tokenManager.GetClientId(request.SessionToken);
@@ -326,7 +330,7 @@ namespace BankServer
                             {
                                 //reply = new AuthReply
                                 //{
-                                //    
+                                //    Это должен быть ответ, но у меня нет подходящего класса Reply
                                 //};
                                 //await SendReplyAsync(reply, request);
                                 return;
@@ -337,12 +341,12 @@ namespace BankServer
             }
             //reply = new AuthReply
             //{
-            //    
+            //    Это должен быть ответ, но у меня нет подходящего класса Reply
             //};
             //await SendReplyAsync(reply, request);
             return;
         }
-        private async Task HandleLoanApplicationAsync(LoanApplicationRequest request)
+        private async Task HandleLoanApplicationAsync(LoanApplicationRequest request)//Запрос на кредит 
         {
             //OperationReply reply;
             var id = _tokenManager.GetClientId(request.SessionToken);
@@ -365,7 +369,7 @@ namespace BankServer
                     await _context.SaveChangesAsync();
                     //reply = new AuthReply
                     //{
-                    //    
+                    //    Это должен быть ответ, но у меня нет подходящего класса Reply
                     //};
                     //await SendReplyAsync(reply, request);
                     //return;
@@ -373,12 +377,12 @@ namespace BankServer
             }
             //reply = new AuthReply
             //{
-            //    
+            //    Это должен быть ответ, но у меня нет подходящего класса Reply
             //};
             //await SendReplyAsync(reply, request);
             return;
         }
-        private async Task HandleCreateAccountAsync(CreateAccountRequest request)
+        private async Task HandleCreateAccountAsync(CreateAccountRequest request)//Создание счёта
         {
             //OperationReply reply;
             var id = _tokenManager.GetClientId(request.SessionToken);
@@ -396,7 +400,7 @@ namespace BankServer
                     await _context.SaveChangesAsync();
                     //reply = new AuthReply
                     //{
-                    //    
+                    //    Это должен быть ответ, но у меня нет подходящего класса Reply
                     //};
                     //await SendReplyAsync(reply, request);
                     //return;
@@ -404,12 +408,12 @@ namespace BankServer
             }
             //reply = new AuthReply
             //{
-            //    
+            //    Это должен быть ответ, но у меня нет подходящего класса Reply
             //};
             //await SendReplyAsync(reply, request);
             return;
         }
-        private async Task HandleCreateDepositAsync(CreateDepositRequest request)
+        private async Task HandleCreateDepositAsync(CreateDepositRequest request)//Создание вклада
         {
             //OperationReply reply;
             var id = _tokenManager.GetClientId(request.SessionToken);
@@ -425,14 +429,14 @@ namespace BankServer
                         {
                             UserId = (int)id,
                             Amount = request.Amount,
-                            InterestRate = _random.Next(50, 101) / 10.0m
+                            InterestRate = _random.Next(50, 101) / 10.0m//Хз как правильнее сделать процент, поэтому здесь рандом
                         };
                         _context.Deposits.Add(deposit);
                         account.Balance -= request.Amount;
                         await _context.SaveChangesAsync();
                         //reply = new AuthReply
                         //{
-                        //    
+                        //    Это должен быть ответ, но у меня нет подходящего класса Reply
                         //};
                         //await SendReplyAsync(reply, request);
                         //return;
@@ -441,12 +445,12 @@ namespace BankServer
             }
             //reply = new AuthReply
             //{
-            //    
+            //    Это должен быть ответ, но у меня нет подходящего класса Reply
             //};
             //await SendReplyAsync(reply, request);
             return;
         }
-        private async Task HandleRegisterAsync(RegisterRequest request)
+        private async Task HandleRegisterAsync(RegisterRequest request)//Регистрация
         {
             if (string.IsNullOrWhiteSpace(request.FirstName) ||
             string.IsNullOrWhiteSpace(request.LastName) ||
@@ -510,9 +514,9 @@ namespace BankServer
                         EmployeeId = GetFirstAvailableId(await _context.Employees.Distinct().Select(e => e.EmployeeId).ToListAsync()),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
-                        AccessLevel = _random.Next(1, 4).ToString(),
+                        AccessLevel = _random.Next(1, 4).ToString(),//Доступ тоже рандомом. Сделал 4 уровня доступа(ни на что не влияют)
                         Phone = request.Phone,
-                        BranchId = (await _context.Branches.Select(b => b.BranchId).ToListAsync())[_random.Next(_context.Branches.Count())],
+                        BranchId = (await _context.Branches.Select(b => b.BranchId).ToListAsync())[_random.Next(_context.Branches.Count())],//Назначается в отделение случайно
                         Country = request.Country,
                         HireDate = DateTime.UtcNow
                     };
@@ -535,7 +539,7 @@ namespace BankServer
                 return;
             }
         }
-        private async Task HandleLoginAsync(LoginRequest request)
+        private async Task HandleLoginAsync(LoginRequest request)//Вход 
         {
             if (request.isEmployee)
             {
@@ -592,12 +596,15 @@ namespace BankServer
                 }
             }
         }
+
+
+        //Дальше команды для работы с сервером
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Остановка Consumer...");
             return Task.CompletedTask;
         }
-        public void Dispose()
+        public void Dispose()//Вызывается автоматически
         {
             _context.SaveChanges();
             _context.Dispose();
@@ -605,7 +612,7 @@ namespace BankServer
             _channel?.DisposeAsync().GetAwaiter().GetResult();
             _connection?.DisposeAsync().GetAwaiter().GetResult();
         }
-        public ServerStatus GetStatus()
+        public ServerStatus GetStatus()//Инфа о работе сервера в целом
         {
             return new ServerStatus
             {
@@ -617,7 +624,7 @@ namespace BankServer
             };
         }
 
-        public async Task<HealthStatus> GetHealth()
+        public async Task<HealthStatus> GetHealth()//Инфа о подключении к БД
         {
             var health = new HealthStatus { IsHealthy = true };
 
@@ -638,6 +645,7 @@ namespace BankServer
             return health;
         }
 
+        //Остановка/Продолжение обработки сообщений
         public void PauseQueue()
         {
             if (_isPaused != true)
@@ -663,7 +671,7 @@ namespace BankServer
         }
 
 
-        public async Task ChangeProviderAsync(ServerOptions options)
+        public async Task ChangeProviderAsync(ServerOptions options)//Смена провайдера
         {
             var newProvider = options.Provider;
             var connectionString = options.ConnectionString;

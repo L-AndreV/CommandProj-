@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
 
 
-namespace BankServer
+namespace BankServer//Здесь находиться интерфейс для взаимодействия админа с сервером
 {
     public class Program
     {
         IHost? host = null;
         BankServer.CommandHandler commandHandler = null;
-        static async Task Main()
+        static async Task Main()//Здесь настраиваются основные компоненты и происходит обработка команд админа
         {
             ServerOptions options = new();
             string[] parts;
@@ -190,27 +190,29 @@ namespace BankServer
                 }
             }
         }
-        async Task ConfigureHost(ServerOptions serverOptions)
+        async Task ConfigureHost(ServerOptions serverOptions)//Тут интереснее. Здесь происходит настройка самого сервера
         {
+            //Её можно провести только до его запуска
+            //Здесь используются только те классы, которые сделаны по определённому шаблону
             var logsDir = Path.Combine("Logging", "logs");
             if (!Directory.Exists(logsDir))
                 Directory.CreateDirectory(logsDir);
             var logFilePath = Path.Combine("Logging", "logs", $"consumer-{DateTime.Today:yyyy-MM-dd}.log");
 
-            host = Host.CreateDefaultBuilder()
+            host = Host.CreateDefaultBuilder()//Создание хоста
                 .ConfigureServices((context, services) =>
                 {
-                    services.Configure<ServerOptions>(options =>
+                    services.Configure<ServerOptions>(options =>//Настройка того, что передаётся серверу при старте
                     {
                         options.Provider = serverOptions.Provider;
                         options.ConnectionString = serverOptions.ConnectionString;
                     });
-                    services.AddHostedService<Server>();
+                    services.AddHostedService<Server>();//Добавление сервера в хост
                     services.AddSingleton<Server>();
-                    services.AddSingleton<TokenManager>();
-                    services.AddSingleton<CommandHandler>();
+                    services.AddSingleton<TokenManager>();//Добавление менеджера токенов в хост
+                    services.AddSingleton<CommandHandler>();//Добавление команд для управления сервером в хост
                 })
-                .ConfigureLogging(logging =>
+                .ConfigureLogging(logging =>//Добавление логера в хост
                 {
                     logging.ClearProviders();
                     logging.AddConsole();
@@ -234,7 +236,7 @@ namespace BankServer
             Console.WriteLine();
         }
     }
-    public class ServerOptions
+    public class ServerOptions//Класс для передачи серверу при старте
     {
         public DbProvider Provider { get; set; } = DbProvider.SQLite;
         public string ConnectionString { get; set; } = "default_connection";

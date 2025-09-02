@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-public class SimpleFileLogger : ILogger
+public class SimpleFileLogger : ILogger//Тоже один из примеров
 {
     private readonly string _logFilePath;
 
@@ -13,8 +13,9 @@ public class SimpleFileLogger : ILogger
 
     public bool IsEnabled(LogLevel logLevel) => true;
 
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)//Здесь уже происходит запись в файл
     {
+        //Ну и определение формата записи
         var message = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{logLevel}] {formatter(state, exception)}";
 
         try

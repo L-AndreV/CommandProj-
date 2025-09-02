@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-public class SimpleFileLoggerProvider : ILoggerProvider
+public class SimpleFileLoggerProvider : ILoggerProvider//Тоже часть примера
 {
     private readonly string _logFilePath;
 
